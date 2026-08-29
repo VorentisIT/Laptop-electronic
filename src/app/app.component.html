@@ -1,0 +1,29 @@
+<!-- Custom Dynamic Cursor -->
+<app-custom-cursor></app-custom-cursor>
+
+<!-- Top Navigation Header -->
+<app-nav-header></app-nav-header>
+
+<!-- Main Viewport Router -->
+<main class="main-content">
+  <router-outlet></router-outlet>
+</main>
+
+<!-- Global Technical Footer -->
+<app-footer></app-footer>
+
+<!-- Slide-over Cart Drawer -->
+<app-cart-drawer></app-cart-drawer>
+
+<!-- Universal Command-K Search Modal -->
+<app-search-modal></app-search-modal>
+
+<!-- Flying Item Animation Overlay -->
+@if (cartService.flyingItem(); as flying) {
+  <div 
+    class="flying-product-item"
+    [style.left.px]="flying.startX"
+    [style.top.px]="flying.startY">
+    <img [src]="flying.image" alt="Added product" />
+  </div>
+}
