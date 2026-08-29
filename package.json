@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "deploy:cf": "ng build && npx wrangler pages deploy dist/vorentis-temp/browser"
+    "deploy:pages": "ng build && npx wrangler pages deploy dist/vorentis-temp/browser --project-name=laptop-electronic"
   },
   "private": true,
   "dependencies": {
