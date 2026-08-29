@@ -29,7 +29,7 @@ gsap.registerPlugin(ScrollTrigger);
         <!-- Ambient Studio 4K Glow -->
         <div class="ambient-glow"></div>
 
-        <!-- Ultra-High Fidelity 4K Frame Sequence Canvas -->
+        <!-- Zero-Copy High-Speed GPU Canvas -->
         <canvas #stageCanvas class="cinema-canvas"></canvas>
 
         <!-- Subtle Gradient Vignette around Canvas -->
@@ -96,6 +96,7 @@ gsap.registerPlugin(ScrollTrigger);
       height: 100vh;
       background: #020610;
       overflow: hidden;
+      contain: paint layout;
     }
 
     .cinema-viewport {
@@ -113,10 +114,11 @@ gsap.registerPlugin(ScrollTrigger);
       width: 70vw;
       height: 70vh;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(0, 242, 255, 0.09) 0%, rgba(139, 92, 246, 0.05) 45%, transparent 75%);
-      filter: blur(100px);
+      background: radial-gradient(circle, rgba(0, 242, 255, 0.08) 0%, rgba(139, 92, 246, 0.04) 45%, transparent 75%);
+      filter: blur(90px);
       pointer-events: none;
       z-index: 1;
+      transform: translateZ(0);
     }
 
     .cinema-canvas {
@@ -125,11 +127,7 @@ gsap.registerPlugin(ScrollTrigger);
       object-fit: contain;
       z-index: 2;
       position: relative;
-      image-rendering: -webkit-optimize-contrast;
-      image-rendering: crisp-edges;
-      filter: contrast(1.08) brightness(1.02) saturate(1.06) drop-shadow(0 25px 60px rgba(0, 0, 0, 0.9));
       transform: translateZ(0);
-      backface-visibility: hidden;
       will-change: transform;
     }
 
@@ -141,7 +139,6 @@ gsap.registerPlugin(ScrollTrigger);
       z-index: 3;
     }
 
-    /* Minimalist Elegant Floating Text Layers */
     .cinema-text-layer {
       position: absolute;
       top: 6.5rem;
@@ -150,8 +147,9 @@ gsap.registerPlugin(ScrollTrigger);
       z-index: 5;
       pointer-events: none;
       opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: translateY(16px);
+      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
     }
 
     .cinema-text-layer.is-active {
@@ -185,7 +183,6 @@ gsap.registerPlugin(ScrollTrigger);
       text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
     }
 
-    /* Bottom Bar */
     .cinema-bottom-bar {
       position: absolute;
       bottom: 2rem;
@@ -242,7 +239,6 @@ gsap.registerPlugin(ScrollTrigger);
       transform: translateY(-2px);
     }
 
-    /* Whisper-thin Progress Bar */
     .progress-line-track {
       position: absolute;
       bottom: 0;
@@ -257,7 +253,6 @@ gsap.registerPlugin(ScrollTrigger);
       height: 100%;
       background: #00f2ff;
       box-shadow: 0 0 12px #00f2ff;
-      transition: width 0.04s linear;
     }
 
     @keyframes pulse {
@@ -296,52 +291,66 @@ export class HeroStageComponent implements OnInit, AfterViewInit, OnDestroy {
   currentFrameIndex = signal<number>(0);
   currentPhase = signal<number>(1);
 
-  private images: HTMLImageElement[] = [];
+  // Cached GPU ImageBitmaps for 0ms render latency
+  private bitmaps: (ImageBitmap | HTMLImageElement)[] = [];
   private ctx: CanvasRenderingContext2D | null = null;
   private scrollTriggerInstance: ScrollTrigger | null = null;
+  private isRendering = false;
+  private requestedFrame = 0;
 
   ngOnInit() {
-    this.preloadFrames();
+    this.preloadBitmaps();
   }
 
   ngAfterViewInit() {
     this.setupCanvas();
     setTimeout(() => {
       this.initScrollScrubber();
-    }, 100);
+    }, 50);
   }
 
   ngOnDestroy() {
     if (this.scrollTriggerInstance) {
       this.scrollTriggerInstance.kill();
     }
+    // Clean up bitmaps
+    this.bitmaps.forEach(b => {
+      if ('close' in b && typeof b.close === 'function') {
+        b.close();
+      }
+    });
   }
 
-  private preloadFrames() {
-    let loaded = 0;
-    this.frames.forEach((src, idx) => {
-      const img = new Image();
-      img.src = src;
-      img.onload = () => {
-        loaded++;
-        if (idx === 0) {
-          this.renderFrame(0);
+  private async preloadBitmaps() {
+    for (let i = 0; i < this.frames.length; i++) {
+      const src = this.frames[i];
+      try {
+        if ('createImageBitmap' in window) {
+          const response = await fetch(src);
+          const blob = await response.blob();
+          const bitmap = await createImageBitmap(blob);
+          this.bitmaps[i] = bitmap;
+        } else {
+          const img = new Image();
+          img.src = src;
+          this.bitmaps[i] = img;
         }
-        if (loaded === this.frames.length) {
-          ScrollTrigger.refresh();
-        }
-      };
-      this.images.push(img);
-    });
+      } catch {
+        const img = new Image();
+        img.src = src;
+        this.bitmaps[i] = img;
+      }
+
+      if (i === 0) {
+        this.scheduleRender(0);
+      }
+    }
+    ScrollTrigger.refresh();
   }
 
   private setupCanvas() {
     const canvas = this.stageCanvas.nativeElement;
-    this.ctx = canvas.getContext('2d', { alpha: true });
-    if (this.ctx) {
-      this.ctx.imageSmoothingEnabled = true;
-      this.ctx.imageSmoothingQuality = 'high';
-    }
+    this.ctx = canvas.getContext('2d', { alpha: false, desynchronized: true });
     this.resizeCanvas();
   }
 
@@ -350,41 +359,49 @@ export class HeroStageComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.stageCanvas || !this.stageContainer) return;
     const canvas = this.stageCanvas.nativeElement;
     const container = this.stageContainer.nativeElement;
-    
-    // Super-sampled backing store (2.5x - 3x device pixel ratio for 4K crispness)
-    const dpr = Math.max(window.devicePixelRatio || 1, 2.5);
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
     canvas.width = Math.round(container.clientWidth * dpr);
     canvas.height = Math.round(container.clientHeight * dpr);
 
-    if (this.ctx) {
-      this.ctx.imageSmoothingEnabled = true;
-      this.ctx.imageSmoothingQuality = 'high';
-    }
+    this.scheduleRender(this.currentFrameIndex());
+  }
 
-    this.renderFrame(this.currentFrameIndex());
+  private scheduleRender(frameIdx: number) {
+    this.requestedFrame = frameIdx;
+    if (!this.isRendering) {
+      this.isRendering = true;
+      requestAnimationFrame(() => {
+        this.renderFrame(this.requestedFrame);
+        this.isRendering = false;
+      });
+    }
   }
 
   private renderFrame(frameIdx: number) {
     if (!this.ctx || !this.stageCanvas) return;
     const canvas = this.stageCanvas.nativeElement;
-    const img = this.images[frameIdx];
+    const asset = this.bitmaps[frameIdx];
 
-    this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (asset) {
+      const width = 'width' in asset ? asset.width : (asset as HTMLImageElement).naturalWidth;
+      const height = 'height' in asset ? asset.height : (asset as HTMLImageElement).naturalHeight;
 
-    if (img && img.complete && img.naturalWidth > 0) {
-      const hRatio = canvas.width / img.width;
-      const vRatio = canvas.height / img.height;
-      const ratio = Math.min(hRatio, vRatio) * 0.94; // Maximize canvas coverage with crisp margins
+      if (width > 0 && height > 0) {
+        const hRatio = canvas.width / width;
+        const vRatio = canvas.height / height;
+        const ratio = Math.min(hRatio, vRatio) * 0.94;
 
-      const centerShiftX = (canvas.width - img.width * ratio) / 2;
-      const centerShiftY = (canvas.height - img.height * ratio) / 2;
+        const centerShiftX = (canvas.width - width * ratio) / 2;
+        const centerShiftY = (canvas.height - height * ratio) / 2;
 
-      this.ctx.drawImage(
-        img,
-        0, 0, img.width, img.height,
-        centerShiftX, centerShiftY, img.width * ratio, img.height * ratio
-      );
+        // Fast zero-copy draw
+        this.ctx.drawImage(
+          asset,
+          0, 0, width, height,
+          centerShiftX, centerShiftY, width * ratio, height * ratio
+        );
+      }
     }
   }
 
@@ -394,10 +411,10 @@ export class HeroStageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.scrollTriggerInstance = ScrollTrigger.create({
       trigger: container,
       start: 'top top',
-      end: '+=180%',
+      end: '+=150%',
       pin: true,
       pinSpacing: true,
-      scrub: 0.25,
+      scrub: 0.15, // Blisteringly snappy 0.15s scrub
       onUpdate: (self) => {
         const progress = self.progress;
         this.scrollProgress.set(progress);
@@ -409,7 +426,7 @@ export class HeroStageComponent implements OnInit, AfterViewInit, OnDestroy {
 
         if (frameIndex !== this.currentFrameIndex()) {
           this.currentFrameIndex.set(frameIndex);
-          this.renderFrame(frameIndex);
+          this.scheduleRender(frameIndex);
         }
 
         if (progress < 0.35) {
@@ -421,8 +438,6 @@ export class HeroStageComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       }
     });
-
-    ScrollTrigger.refresh();
   }
 
   addFlagshipToCart(e: MouseEvent) {

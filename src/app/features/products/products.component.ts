@@ -1,10 +1,14 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, AfterViewInit, OnDestroy, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ProductService } from '../../core/services/product.service';
 import { ProductCardComponent } from '../../shared/components/product-card/product-card.component';
 import { ProductCategory, ProductSegment } from '../../core/models/product.model';
+
+gsap.registerPlugin(ScrollTrigger);
 
 @Component({
   selector: 'app-products',
@@ -188,12 +192,12 @@ import { ProductCategory, ProductSegment } from '../../core/models/product.model
   `,
   styles: [`
     .products-page {
-      padding-top: 8rem;
-      padding-bottom: 8rem;
+      padding-top: 6.5rem;
+      padding-bottom: 4.5rem;
     }
 
     .catalog-header {
-      margin-bottom: 2.5rem;
+      margin-bottom: 1.75rem;
     }
 
     .catalog-title {
@@ -364,17 +368,82 @@ import { ProductCategory, ProductSegment } from '../../core/models/product.model
     }
   `]
 })
-export class ProductsComponent {
+export class ProductsComponent implements AfterViewInit, OnDestroy {
   productService = inject(ProductService);
+  private el = inject(ElementRef);
 
   readonly filterState = this.productService.filterState;
   layoutMode = signal<'grid' | 'spec'>('grid');
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.initAnimations();
+    }, 50);
+  }
+
+  ngOnDestroy() {
+    ScrollTrigger.getAll().forEach(st => {
+      if (this.el.nativeElement.contains(st.trigger as Node)) {
+        st.kill();
+      }
+    });
+  }
+
+  private initAnimations() {
+    const root = this.el.nativeElement as HTMLElement;
+    const header = root.querySelector('.catalog-header');
+    const toolbar = root.querySelector('.toolbar-wrapper');
+    const pills = root.querySelector('.segment-filter-row');
+    const cards = root.querySelectorAll('app-product-card');
+
+    if (header) {
+      gsap.from(header, {
+        opacity: 0,
+        y: 30,
+        duration: 0.8,
+        ease: 'power3.out'
+      });
+    }
+
+    if (toolbar) {
+      gsap.from(toolbar, {
+        opacity: 0,
+        y: 20,
+        duration: 0.7,
+        delay: 0.15,
+        ease: 'power3.out'
+      });
+    }
+
+    if (pills) {
+      gsap.from(pills, {
+        opacity: 0,
+        y: 15,
+        duration: 0.6,
+        delay: 0.25,
+        ease: 'power3.out'
+      });
+    }
+
+    if (cards.length > 0) {
+      gsap.from(cards, {
+        opacity: 0,
+        y: 40,
+        stagger: 0.08,
+        duration: 0.8,
+        delay: 0.3,
+        ease: 'power3.out'
+      });
+    }
+  }
+
   setCategory(category: ProductCategory | 'all') {
     this.productService.setCategory(category);
+    setTimeout(() => this.initAnimations(), 50);
   }
 
   setSegment(segment: ProductSegment | 'all') {
     this.productService.setSegment(segment);
+    setTimeout(() => this.initAnimations(), 50);
   }
 }

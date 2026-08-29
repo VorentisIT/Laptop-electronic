@@ -11,10 +11,9 @@ import { RouterLink } from '@angular/router';
       <div class="footer-grid container-custom">
         <!-- Brand & Vision -->
         <div class="footer-col brand-col">
-          <div class="footer-logo">
-            <span class="logo-symbol">⬢</span>
-            <span class="logo-text font-display">VORENTIS</span>
-          </div>
+          <a routerLink="/" class="footer-logo">
+            <img src="images/vorentis-logo.png" alt="Vorentis Logo" class="footer-logo-img" />
+          </a>
           <p class="brand-manifesto">
             Forging high-performance computing hardware, liquid-silicon architectures, and neural workstations without thermal or aesthetic compromise.
           </p>
@@ -111,23 +110,23 @@ import { RouterLink } from '@angular/router';
     }
 
     .footer-logo {
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
       margin-bottom: 1.25rem;
+      text-decoration: none;
     }
 
-    .logo-symbol {
-      color: #00f2ff;
-      font-size: 1.4rem;
-      filter: drop-shadow(0 0 10px #00f2ff);
+    .footer-logo-img {
+      height: 38px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 0 14px rgba(0, 242, 255, 0.45));
+      transition: filter 0.3s ease, transform 0.3s ease;
     }
 
-    .logo-text {
-      font-size: 1.5rem;
-      font-weight: 800;
-      letter-spacing: 0.15em;
-      color: #ffffff;
+    .footer-logo-img:hover {
+      filter: drop-shadow(0 0 20px rgba(0, 242, 255, 0.75));
+      transform: scale(1.03);
     }
 
     .brand-manifesto {

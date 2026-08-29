@@ -11,6 +11,16 @@ import { CartService } from '../../core/services/cart.service';
   imports: [CommonModule, RouterLink],
   template: `
     <div class="compare-page container-custom">
+      <!-- Top Back Navigation Breadcrumb -->
+      <div class="page-breadcrumb mb-6">
+        <a routerLink="/products" class="back-btn font-mono text-xs">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+          PREVIOUS // STORE CATALOG
+        </a>
+      </div>
+
       <!-- Compare Header -->
       <div class="compare-header">
         <span class="tech-badge">SYNCHRONIZED BENCHMARK MATRIX</span>
@@ -158,8 +168,33 @@ import { CartService } from '../../core/services/cart.service';
   `,
   styles: [`
     .compare-page {
-      padding-top: 8rem;
-      padding-bottom: 8rem;
+      padding-top: 6.5rem;
+      padding-bottom: 4.5rem;
+    }
+
+    .page-breadcrumb {
+      display: flex;
+      align-items: center;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 0.85rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 4px;
+      color: #94a3b8;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .back-btn:hover {
+      border-color: #00f2ff;
+      color: #00f2ff;
+      background: rgba(0, 242, 255, 0.08);
+      transform: translateX(-2px);
     }
 
     .compare-header {

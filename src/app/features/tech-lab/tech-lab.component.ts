@@ -1,14 +1,19 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, signal, inject, AfterViewInit, OnDestroy, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SoundService } from '../../core/services/sound.service';
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface TechComponentSpec {
   id: string;
   name: string;
   category: string;
   badge: string;
-  icon: string;
+  icon?: string;
+  iconSvg: string;
   whatItDoes: string;
   whyItMatters: string;
   perfImpact: string;
@@ -22,6 +27,16 @@ interface TechComponentSpec {
   imports: [CommonModule, RouterLink],
   template: `
     <div class="tech-lab-page container-custom">
+      <!-- Top Back Navigation Breadcrumb -->
+      <div class="page-breadcrumb mb-6">
+        <a routerLink="/" class="back-btn font-mono text-xs">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+          PREVIOUS // BACK TO SHOWROOM
+        </a>
+      </div>
+
       <!-- Lab Header -->
       <div class="lab-header">
         <span class="tech-badge emerald">VORENTIS HARDWARE LABORATORY</span>
@@ -31,14 +46,14 @@ interface TechComponentSpec {
         </p>
       </div>
 
-      <!-- Component Navigation Ribbon -->
+      <!-- Component Navigation Ribbon with Professional SVGs -->
       <div class="components-nav-ribbon tech-box font-mono text-xs">
         @for (item of labSpecs; track item.id) {
           <button 
             class="nav-tab-btn" 
             [class.is-active]="selectedComponent().id === item.id"
             (click)="selectComponent(item)">
-            <span>{{ item.icon }}</span>
+            <span class="tab-icon-wrap" [innerHTML]="item.iconSvg"></span>
             <span>{{ item.name }}</span>
           </button>
         }
@@ -57,7 +72,7 @@ interface TechComponentSpec {
             <!-- Visual Hologram Graphic -->
             <div class="hologram-visual">
               <div class="holo-core">
-                <span class="holo-icon">{{ selectedComponent().icon }}</span>
+                <span class="holo-icon" [innerHTML]="selectedComponent().iconSvg"></span>
               </div>
               <div class="holo-ring outer"></div>
               <div class="holo-ring inner"></div>
@@ -123,12 +138,12 @@ interface TechComponentSpec {
   `,
   styles: [`
     .tech-lab-page {
-      padding-top: 8rem;
-      padding-bottom: 8rem;
+      padding-top: 5.5rem;
+      padding-bottom: 4.5rem;
     }
 
     .lab-header {
-      margin-bottom: 2.5rem;
+      margin-bottom: 1.75rem;
     }
 
     .lab-title {
@@ -144,13 +159,54 @@ interface TechComponentSpec {
       max-width: 650px;
     }
 
-    .components-nav-ribbon {
+    .page-breadcrumb {
       display: flex;
+      align-items: center;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
       gap: 0.5rem;
-      padding: 0.75rem;
-      border-radius: 6px;
-      overflow-x: auto;
-      background: #080e1a;
+      padding: 0.4rem 0.85rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 4px;
+      color: #94a3b8;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .back-btn:hover {
+      border-color: #00f2ff;
+      color: #00f2ff;
+      background: rgba(0, 242, 255, 0.08);
+      transform: translateX(-2px);
+    }
+
+    .tab-icon-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: inherit;
+    }
+
+    .tab-icon-wrap svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .holo-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #00f2ff;
+      filter: drop-shadow(0 0 10px #00f2ff);
+    }
+
+    .holo-icon svg {
+      width: 42px;
+      height: 42px;
     }
 
     .nav-tab-btn {
@@ -320,8 +376,9 @@ interface TechComponentSpec {
     }
   `]
 })
-export class TechLabComponent {
+export class TechLabComponent implements AfterViewInit, OnDestroy {
   private sound = inject(SoundService);
+  private el = inject(ElementRef);
 
   readonly labSpecs: TechComponentSpec[] = [
     {
@@ -329,7 +386,7 @@ export class TechLabComponent {
       name: 'Dual Cryo-Vapor Chamber',
       category: 'Thermodynamics & Cooling',
       badge: '250W CONTINUOUS TDP',
-      icon: '❄️',
+      iconSvg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H7M17 19H7M2 12h20M5 7l14 14M5 17L19 7"/></svg>`,
       whatItDoes: 'Distributes thermal energy from CPU/GPU dies via phase-change evaporation across sintered copper capillary micro-structures.',
       whyItMatters: 'Eliminates hot-spot throttling entirely, enabling maximum boost clocks without spinning loud acoustic fans over 34 dBA.',
       perfImpact: '+38% sustained rendering throughput over traditional heatpipes.',
@@ -346,7 +403,7 @@ export class TechLabComponent {
       name: '4K 240Hz Tandem Mini-LED',
       category: 'Display & Visual Calibration',
       badge: '2,500 NITS LUMINANCE',
-      icon: '👁️',
+      iconSvg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>`,
       whatItDoes: 'Layers dual emitter stacks with quantum dot polarization to produce pure inky blacks and blinding 2500 nits HDR specular highlights.',
       whyItMatters: 'Delivers zero image retention with Calman-verified Delta-E < 0.8 color accuracy for reference grading suites.',
       perfImpact: '0.03ms pixel response eliminates all ghosting and motion blur.',
@@ -363,7 +420,7 @@ export class TechLabComponent {
       name: 'Si-C Solid-State Battery Cell',
       category: 'Electrochemical Energy Reserve',
       badge: '99.9WH MAXIMUM FAA',
-      icon: '🔋',
+      iconSvg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="10" x="2" y="7" rx="2" ry="2"/><line x1="22" x2="22" y1="11" y2="13"/><path d="m10 10 2 2-2 2"/></svg>`,
       whatItDoes: 'Utilizes silicon-carbon composite anodes to double volumetric energy density compared to legacy lithium-ion polymer pouch cells.',
       whyItMatters: 'Enables 14+ hours of genuine high-intensity creative work without carrying heavy AC power bricks.',
       perfImpact: '0-80% ultra-fast recharge in 34 minutes via 140W GaN PD.',
@@ -380,7 +437,7 @@ export class TechLabComponent {
       name: 'RTX 5090 Liquid Core Silicon',
       category: 'Neural & Graphics Architecture',
       badge: '32GB GDDR7 512-BIT',
-      icon: '🚀',
+      iconSvg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="5" y="5" rx="2"/><rect width="6" height="6" x="9" y="9"/><path d="M9 1v4M15 1v4M9 19v4M15 19v4M1 9h4M1 15h4M19 9h4M19 15h4"/></svg>`,
       whatItDoes: '3nm GPU silicon containing 24,576 CUDA cores and dedicated 5th Gen Tensor neural accelerators.',
       whyItMatters: 'Enables loading 70B parameter LLM models completely into local ultra-fast GDDR7 memory.',
       perfImpact: '1,792 GB/s memory bandwidth delivers 4K 180+ FPS ray traced rasterization.',
@@ -396,8 +453,69 @@ export class TechLabComponent {
 
   selectedComponent = signal<TechComponentSpec>(this.labSpecs[0]);
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.initAnimations();
+    }, 50);
+  }
+
+  ngOnDestroy() {
+    ScrollTrigger.getAll().forEach(st => {
+      if (this.el.nativeElement.contains(st.trigger as Node)) {
+        st.kill();
+      }
+    });
+  }
+
+  private initAnimations() {
+    const root = this.el.nativeElement as HTMLElement;
+    const header = root.querySelector('.lab-header');
+    const ribbon = root.querySelector('.components-nav-ribbon');
+    const deepDive = root.querySelector('.component-deep-dive');
+
+    if (header) {
+      gsap.from(header, {
+        opacity: 0,
+        y: 30,
+        duration: 0.8,
+        ease: 'power3.out'
+      });
+    }
+
+    if (ribbon) {
+      gsap.from(ribbon, {
+        opacity: 0,
+        y: 20,
+        duration: 0.7,
+        delay: 0.15,
+        ease: 'power3.out'
+      });
+    }
+
+    if (deepDive) {
+      gsap.from(deepDive, {
+        opacity: 0,
+        y: 35,
+        duration: 0.8,
+        delay: 0.25,
+        ease: 'power3.out'
+      });
+    }
+  }
+
   selectComponent(comp: TechComponentSpec) {
     this.selectedComponent.set(comp);
     this.sound.playClick();
+    
+    const root = this.el.nativeElement as HTMLElement;
+    const details = root.querySelector('.breakdown-details');
+    const diagram = root.querySelector('.diagram-plate');
+
+    if (details && diagram) {
+      gsap.fromTo([diagram, details], 
+        { opacity: 0.4, scale: 0.98 },
+        { opacity: 1, scale: 1, duration: 0.35, ease: 'power2.out' }
+      );
+    }
   }
 }

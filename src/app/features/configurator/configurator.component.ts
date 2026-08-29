@@ -20,48 +20,102 @@ import { ConfigPriority } from '../../core/models/configurator.model';
           Answer a few quick questions regarding your primary workloads and priorities to let our recommendation engine allocate the optimal hardware rig.
         </p>
 
-        <!-- Step Indicator -->
+        <!-- Step Indicator (Interactive navigation) -->
         <div class="step-tracker font-mono text-xs mt-6">
-          <div class="step-pill" [class.is-active]="configService.state().currentStep >= 1">01. WORKFLOW</div>
+          <button 
+            type="button" 
+            class="step-pill-btn" 
+            [class.is-active]="configService.state().currentStep === 1 && !configService.isCompleted()"
+            [class.is-completed]="configService.state().currentStep > 1 || configService.isCompleted()"
+            (click)="goToStep(1)">
+            01. WORKFLOW
+          </button>
           <div class="step-line"></div>
-          <div class="step-pill" [class.is-active]="configService.state().currentStep >= 2">02. PRIORITIES</div>
+          <button 
+            type="button" 
+            class="step-pill-btn" 
+            [class.is-active]="configService.state().currentStep === 2 && !configService.isCompleted()"
+            [class.is-completed]="configService.state().currentStep > 2 || configService.isCompleted()"
+            (click)="goToStep(2)">
+            02. PRIORITIES
+          </button>
           <div class="step-line"></div>
-          <div class="step-pill" [class.is-active]="configService.state().currentStep >= 3">03. BUDGET</div>
+          <button 
+            type="button" 
+            class="step-pill-btn" 
+            [class.is-active]="configService.state().currentStep === 3 && !configService.isCompleted()"
+            [class.is-completed]="configService.isCompleted()"
+            (click)="goToStep(3)">
+            03. BUDGET
+          </button>
           <div class="step-line"></div>
-          <div class="step-pill" [class.is-active]="configService.isCompleted()">04. MATCHES</div>
+          <button 
+            type="button" 
+            class="step-pill-btn" 
+            [class.is-active]="configService.isCompleted()"
+            (click)="goToStep(4)">
+            04. MATCHES
+          </button>
         </div>
       </div>
 
-      <!-- Step 1: Workload Selection -->
+      <!-- Step 1: Workload Selection with Unsplash Visual Cards -->
       @if (configService.state().currentStep === 1 && !configService.isCompleted()) {
         <div class="wizard-step-body animate-fadeIn">
           <h2 class="step-question font-heading">What are you building or creating for?</h2>
           <div class="options-grid">
-            <button class="choice-card tech-box" (click)="selectUseCase('creative')">
-              <span class="choice-icon">🎨</span>
-              <h3 class="choice-title font-heading">CREATIVE &amp; 3D VFX</h3>
-              <p class="choice-desc">Video editing, Blender rendering, Unreal Engine, Color grading.</p>
+            <button class="choice-card tech-box spotlight-card" (click)="selectUseCase('creative')">
+              <div class="card-media-bay">
+                <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80" alt="Creative & 3D VFX" class="choice-img" />
+                <div class="media-vignette"></div>
+              </div>
+              <div class="card-content-bay">
+                <span class="choice-tag font-mono">01 // CREATIVE</span>
+                <h3 class="choice-title font-heading">CREATIVE &amp; 3D VFX</h3>
+                <p class="choice-desc font-sans">Video editing, Blender rendering, Unreal Engine, Color grading.</p>
+              </div>
             </button>
-            <button class="choice-card tech-box" (click)="selectUseCase('developer')">
-              <span class="choice-icon">⚡</span>
-              <h3 class="choice-title font-heading">AI &amp; DEVELOPMENT</h3>
-              <p class="choice-desc">Local LLM inference, compilation, Docker, Data engineering.</p>
+
+            <button class="choice-card tech-box spotlight-card" (click)="selectUseCase('developer')">
+              <div class="card-media-bay">
+                <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80" alt="AI & Development" class="choice-img" />
+                <div class="media-vignette"></div>
+              </div>
+              <div class="card-content-bay">
+                <span class="choice-tag font-mono">02 // AI &amp; CODE</span>
+                <h3 class="choice-title font-heading">AI &amp; DEVELOPMENT</h3>
+                <p class="choice-desc font-sans">Local LLM inference, compilation, Docker, Data engineering.</p>
+              </div>
             </button>
-            <button class="choice-card tech-box" (click)="selectUseCase('gaming')">
-              <span class="choice-icon">🕹️</span>
-              <h3 class="choice-title font-heading">GAMING &amp; ESPORTS</h3>
-              <p class="choice-desc">High refresh 240Hz 4K gaming, Ray tracing, Low latency.</p>
+
+            <button class="choice-card tech-box spotlight-card" (click)="selectUseCase('gaming')">
+              <div class="card-media-bay">
+                <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80" alt="Gaming & Esports" class="choice-img" />
+                <div class="media-vignette"></div>
+              </div>
+              <div class="card-content-bay">
+                <span class="choice-tag font-mono">03 // ESPORTS</span>
+                <h3 class="choice-title font-heading">GAMING &amp; ESPORTS</h3>
+                <p class="choice-desc font-sans">High refresh 240Hz 4K gaming, Ray tracing, Low latency.</p>
+              </div>
             </button>
-            <button class="choice-card tech-box" (click)="selectUseCase('business')">
-              <span class="choice-icon">💼</span>
-              <h3 class="choice-title font-heading">STUDIO &amp; EXECUTIVE</h3>
-              <p class="choice-desc">Ultra-long battery, lightweight chassis, quiet acoustics.</p>
+
+            <button class="choice-card tech-box spotlight-card" (click)="selectUseCase('business')">
+              <div class="card-media-bay">
+                <img src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=800&q=80" alt="Studio & Executive" class="choice-img" />
+                <div class="media-vignette"></div>
+              </div>
+              <div class="card-content-bay">
+                <span class="choice-tag font-mono">04 // EXECUTIVE</span>
+                <h3 class="choice-title font-heading">STUDIO &amp; EXECUTIVE</h3>
+                <p class="choice-desc font-sans">Ultra-long battery, lightweight chassis, quiet acoustics.</p>
+              </div>
             </button>
           </div>
         </div>
       }
 
-      <!-- Step 2: Key Priorities Multi-select -->
+      <!-- Step 2: Key Priorities Multi-select with Unsplash Imagery -->
       @if (configService.state().currentStep === 2 && !configService.isCompleted()) {
         <div class="wizard-step-body animate-fadeIn">
           <h2 class="step-question font-heading">What specifications matter most to you?</h2>
@@ -69,57 +123,87 @@ import { ConfigPriority } from '../../core/models/configurator.model';
 
           <div class="options-grid">
             <button 
-              class="choice-card tech-box" 
+              class="choice-card tech-box spotlight-card" 
               [class.is-selected]="isPrioritySelected('performance')"
               (click)="togglePriority('performance')">
-              <span class="choice-icon">🚀</span>
-              <h3 class="choice-title font-heading">EXTREME MULTI-CORE SILICON</h3>
-              <p class="choice-desc">Maximum 24+ core throughput and sustained desktop clock speeds.</p>
+              <div class="card-media-bay priority-media">
+                <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80" alt="Extreme Multi-Core" class="choice-img" />
+                <div class="media-vignette"></div>
+              </div>
+              <div class="card-content-bay">
+                <h3 class="choice-title font-heading">EXTREME MULTI-CORE SILICON</h3>
+                <p class="choice-desc font-sans">Maximum 24+ core throughput and sustained desktop clock speeds.</p>
+              </div>
             </button>
 
             <button 
-              class="choice-card tech-box" 
+              class="choice-card tech-box spotlight-card" 
               [class.is-selected]="isPrioritySelected('gpu')"
               (click)="togglePriority('gpu')">
-              <span class="choice-icon">🧠</span>
-              <h3 class="choice-title font-heading">NEXT-GEN HIGH VRAM GPU</h3>
-              <p class="choice-desc">RTX 50-Series with 16GB-32GB GDDR7 video memory.</p>
+              <div class="card-media-bay priority-media">
+                <img src="https://images.unsplash.com/photo-1591488320449-011701bb6704?auto=format&fit=crop&w=600&q=80" alt="High VRAM GPU" class="choice-img" />
+                <div class="media-vignette"></div>
+              </div>
+              <div class="card-content-bay">
+                <h3 class="choice-title font-heading">NEXT-GEN HIGH VRAM GPU</h3>
+                <p class="choice-desc font-sans">RTX 50-Series with 16GB-32GB GDDR7 video memory.</p>
+              </div>
             </button>
 
             <button 
-              class="choice-card tech-box" 
+              class="choice-card tech-box spotlight-card" 
               [class.is-selected]="isPrioritySelected('battery')"
               (click)="togglePriority('battery')">
-              <span class="choice-icon">🔋</span>
-              <h3 class="choice-title font-heading">ALL-DAY SOLID-STATE BATTERY</h3>
-              <p class="choice-desc">12+ hours real world productivity on a single charge.</p>
+              <div class="card-media-bay priority-media">
+                <img src="https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=600&q=80" alt="Solid-State Battery" class="choice-img" />
+                <div class="media-vignette"></div>
+              </div>
+              <div class="card-content-bay">
+                <h3 class="choice-title font-heading">ALL-DAY SOLID-STATE BATTERY</h3>
+                <p class="choice-desc font-sans">12+ hours real world productivity on a single charge.</p>
+              </div>
             </button>
 
             <button 
-              class="choice-card tech-box" 
+              class="choice-card tech-box spotlight-card" 
               [class.is-selected]="isPrioritySelected('portability')"
               (click)="togglePriority('portability')">
-              <span class="choice-icon">🪶</span>
-              <h3 class="choice-title font-heading">FEATHERWEIGHT PORTABILITY</h3>
-              <p class="choice-desc">Slim profiles under 1.5 kg crafted from carbon fiber and titanium.</p>
+              <div class="card-media-bay priority-media">
+                <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=600&q=80" alt="Featherweight Portability" class="choice-img" />
+                <div class="media-vignette"></div>
+              </div>
+              <div class="card-content-bay">
+                <h3 class="choice-title font-heading">FEATHERWEIGHT PORTABILITY</h3>
+                <p class="choice-desc font-sans">Slim profiles under 1.5 kg crafted from carbon fiber and titanium.</p>
+              </div>
             </button>
 
             <button 
-              class="choice-card tech-box" 
+              class="choice-card tech-box spotlight-card" 
               [class.is-selected]="isPrioritySelected('display')"
               (click)="togglePriority('display')">
-              <span class="choice-icon">👁️</span>
-              <h3 class="choice-title font-heading">TANDEM OLED DISPLAY</h3>
-              <p class="choice-desc">2,500 nits peak HDR with 100% DCI-P3 calibrated color fidelity.</p>
+              <div class="card-media-bay priority-media">
+                <img src="https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=600&q=80" alt="Tandem OLED Display" class="choice-img" />
+                <div class="media-vignette"></div>
+              </div>
+              <div class="card-content-bay">
+                <h3 class="choice-title font-heading">TANDEM OLED DISPLAY</h3>
+                <p class="choice-desc font-sans">2,500 nits peak HDR with 100% DCI-P3 calibrated color fidelity.</p>
+              </div>
             </button>
 
             <button 
-              class="choice-card tech-box" 
+              class="choice-card tech-box spotlight-card" 
               [class.is-selected]="isPrioritySelected('price')"
               (click)="togglePriority('price')">
-              <span class="choice-icon">💎</span>
-              <h3 class="choice-title font-heading">PRICE-TO-PERFORMANCE VALUE</h3>
-              <p class="choice-desc">Maximum compute power per dollar invested.</p>
+              <div class="card-media-bay priority-media">
+                <img src="https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&w=600&q=80" alt="Price-to-Performance" class="choice-img" />
+                <div class="media-vignette"></div>
+              </div>
+              <div class="card-content-bay">
+                <h3 class="choice-title font-heading">PRICE-TO-PERFORMANCE VALUE</h3>
+                <p class="choice-desc font-sans">Maximum compute power per dollar invested.</p>
+              </div>
             </button>
           </div>
 
@@ -130,33 +214,57 @@ import { ConfigPriority } from '../../core/models/configurator.model';
         </div>
       }
 
-      <!-- Step 3: Budget Tier Selection -->
+      <!-- Step 3: Budget Tier Selection with Visual Imagery -->
       @if (configService.state().currentStep === 3 && !configService.isCompleted()) {
         <div class="wizard-step-body animate-fadeIn">
           <h2 class="step-question font-heading">What is your targeted budget allocation?</h2>
           <div class="options-grid">
-            <button class="choice-card tech-box" (click)="selectBudget('entry')">
-              <span class="choice-icon">🌱</span>
-              <h3 class="choice-title font-heading">ENTRY LEVEL</h3>
-              <p class="choice-desc">Up to \$1,800 · High value essentials</p>
+            <button class="choice-card tech-box spotlight-card" (click)="selectBudget('entry')">
+              <div class="card-media-bay priority-media">
+                <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=600&q=80" alt="Essentials Tier" class="choice-img" />
+                <div class="media-vignette"></div>
+              </div>
+              <div class="card-content-bay">
+                <span class="choice-tag font-mono">TIER // 01</span>
+                <h3 class="choice-title font-heading">ESSENTIALS TIER</h3>
+                <p class="choice-desc font-sans">Up to \$1,800 · High value essentials</p>
+              </div>
             </button>
 
-            <button class="choice-card tech-box" (click)="selectBudget('mid')">
-              <span class="choice-icon">⚡</span>
-              <h3 class="choice-title font-heading">PERFORMANCE TIER</h3>
-              <p class="choice-desc">\$1,800 - \$3,000 · High-spec portable rigs</p>
+            <button class="choice-card tech-box spotlight-card" (click)="selectBudget('mid')">
+              <div class="card-media-bay priority-media">
+                <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=600&q=80" alt="Performance Tier" class="choice-img" />
+                <div class="media-vignette"></div>
+              </div>
+              <div class="card-content-bay">
+                <span class="choice-tag font-mono">TIER // 02</span>
+                <h3 class="choice-title font-heading">PERFORMANCE TIER</h3>
+                <p class="choice-desc font-sans">\$1,800 - \$3,000 · High-spec portable rigs</p>
+              </div>
             </button>
 
-            <button class="choice-card tech-box" (click)="selectBudget('high')">
-              <span class="choice-icon">🔥</span>
-              <h3 class="choice-title font-heading">FLAGSHIP WORKSTATION</h3>
-              <p class="choice-desc">\$3,000 - \$5,000 · Apex tier silicon</p>
+            <button class="choice-card tech-box spotlight-card" (click)="selectBudget('high')">
+              <div class="card-media-bay priority-media">
+                <img src="https://images.unsplash.com/photo-1591488320449-011701bb6704?auto=format&fit=crop&w=600&q=80" alt="Flagship Workstation" class="choice-img" />
+                <div class="media-vignette"></div>
+              </div>
+              <div class="card-content-bay">
+                <span class="choice-tag font-mono">TIER // 03</span>
+                <h3 class="choice-title font-heading">FLAGSHIP WORKSTATION</h3>
+                <p class="choice-desc font-sans">\$3,000 - \$5,000 · Apex tier silicon</p>
+              </div>
             </button>
 
-            <button class="choice-card tech-box" (click)="selectBudget('ultra')">
-              <span class="choice-icon">👑</span>
-              <h3 class="choice-title font-heading">UNCONSTRAINED PRO STUDIO</h3>
-              <p class="choice-desc">\$5,000+ · 64 Cores, Dual RTX 5090</p>
+            <button class="choice-card tech-box spotlight-card" (click)="selectBudget('ultra')">
+              <div class="card-media-bay priority-media">
+                <img src="https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&w=600&q=80" alt="Unconstrained Pro Studio" class="choice-img" />
+                <div class="media-vignette"></div>
+              </div>
+              <div class="card-content-bay">
+                <span class="choice-tag font-mono">TIER // 04</span>
+                <h3 class="choice-title font-heading">UNCONSTRAINED PRO STUDIO</h3>
+                <p class="choice-desc font-sans">\$5,000+ · 64 Cores, Dual RTX 5090</p>
+              </div>
             </button>
           </div>
 
@@ -184,7 +292,7 @@ import { ConfigPriority } from '../../core/models/configurator.model';
 
           <div class="recommendations-list mt-8">
             @for (rec of configService.recommendations(); track rec.product.id; let idx = $index) {
-              <div class="rec-card tech-box" [class.is-top-match]="idx === 0">
+              <div class="rec-card tech-box spotlight-card" [class.is-top-match]="idx === 0">
                 <div class="rec-score-col">
                   <div class="score-circle">
                     <span class="score-num font-display">{{ rec.matchScore }}%</span>
@@ -229,12 +337,12 @@ import { ConfigPriority } from '../../core/models/configurator.model';
   `,
   styles: [`
     .configurator-page {
-      padding-top: 8rem;
-      padding-bottom: 8rem;
+      padding-top: 6.5rem;
+      padding-bottom: 4.5rem;
     }
 
     .wizard-header {
-      margin-bottom: 4rem;
+      margin-bottom: 2.25rem;
     }
 
     .wizard-title {
@@ -259,24 +367,41 @@ import { ConfigPriority } from '../../core/models/configurator.model';
       flex-wrap: wrap;
     }
 
-    .step-pill {
-      padding: 0.35rem 0.75rem;
+    .step-pill-btn {
+      padding: 0.4rem 0.85rem;
       background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 4px;
-      color: #64748b;
+      color: #94a3b8;
+      font-family: inherit;
+      font-size: 0.72rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
 
-    .step-pill.is-active {
+    .step-pill-btn:hover {
+      border-color: rgba(0, 242, 255, 0.4);
+      color: #f8fafc;
+      background: rgba(0, 242, 255, 0.06);
+      transform: translateY(-1px);
+    }
+
+    .step-pill-btn.is-active {
       border-color: #00f2ff;
       color: #00f2ff;
-      background: rgba(0, 242, 255, 0.08);
+      background: rgba(0, 242, 255, 0.12);
+      box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
+    }
+
+    .step-pill-btn.is-completed {
+      color: #10b981;
+      border-color: rgba(16, 185, 129, 0.35);
     }
 
     .step-line {
       width: 20px;
       height: 1px;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.15);
     }
 
     .step-question {
@@ -289,45 +414,90 @@ import { ConfigPriority } from '../../core/models/configurator.model';
 
     .options-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 1.5rem;
-      max-width: 1100px;
+      max-width: 1200px;
       margin: 0 auto;
     }
 
     .choice-card {
-      padding: 2.5rem 1.5rem;
+      padding: 0;
       background: #080e1a;
-      border-radius: 6px;
-      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      overflow: hidden;
       cursor: pointer;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      transition: all 0.25s ease;
+      text-align: left;
+      transition: all 0.3s ease;
+      position: relative;
     }
 
     .choice-card:hover, .choice-card.is-selected {
       border-color: #00f2ff;
-      background: rgba(0, 242, 255, 0.06);
-      transform: translateY(-4px);
-      box-shadow: 0 10px 30px rgba(0, 242, 255, 0.15);
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(0, 242, 255, 0.2);
     }
 
-    .choice-icon {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
+    .choice-card.is-selected {
+      border-color: #00f2ff;
+      background: rgba(0, 242, 255, 0.06);
+    }
+
+    .card-media-bay {
+      position: relative;
+      width: 100%;
+      height: 160px;
+      overflow: hidden;
+      background: #040812;
+    }
+
+    .card-media-bay.priority-media {
+      height: 120px;
+    }
+
+    .choice-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .choice-card:hover .choice-img {
+      transform: scale(1.08);
+    }
+
+    .media-vignette {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 30%, #080e1a 100%);
+      pointer-events: none;
+    }
+
+    .card-content-bay {
+      padding: 1.25rem 1.5rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .choice-tag {
+      font-size: 0.65rem;
+      color: #00f2ff;
+      letter-spacing: 0.12em;
+      margin-bottom: 0.35rem;
     }
 
     .choice-title {
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       font-weight: 700;
       color: #f8fafc;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.4rem;
     }
 
     .choice-desc {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       color: #94a3b8;
       line-height: 1.5;
     }
@@ -457,6 +627,10 @@ import { ConfigPriority } from '../../core/models/configurator.model';
 export class ConfiguratorComponent {
   configService = inject(ConfiguratorService);
   private cartService = inject(CartService);
+
+  goToStep(step: number) {
+    this.configService.goToStep(step);
+  }
 
   selectUseCase(useCase: ProductSegment) {
     this.configService.setUseCase(useCase);

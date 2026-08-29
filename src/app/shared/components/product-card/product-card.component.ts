@@ -12,7 +12,7 @@ import { SoundService } from '../../../core/services/sound.service';
   imports: [CommonModule, RouterLink],
   template: `
     <div 
-      class="product-card-2 tech-box" 
+      class="product-card-2 tech-box spotlight-card" 
       [class.is-hovered]="isHovered()"
       (mouseenter)="onMouseEnter()"
       (mouseleave)="onMouseLeave()"
@@ -106,11 +106,11 @@ import { SoundService } from '../../../core/services/sound.service';
           </div>
 
           <button 
-            class="quick-add-btn" 
+            class="quick-add-btn shimmer-btn" 
             (click)="quickAdd($event)"
             data-cursor="ADD"
             title="Add to Cart Manifest">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
               <line x1="12" y1="5" x2="12" y2="19"></line>
               <line x1="5" y1="12" x2="19" y2="12"></line>
             </svg>
@@ -222,6 +222,7 @@ import { SoundService } from '../../../core/services/sound.service';
       transform: translateY(10px);
       transition: all 0.3s ease;
       pointer-events: none;
+      z-index: 5;
     }
 
     .spec-overlay-peek.is-visible {
@@ -250,6 +251,8 @@ import { SoundService } from '../../../core/services/sound.service';
       display: flex;
       flex-direction: column;
       flex: 1;
+      position: relative;
+      z-index: 2;
     }
 
     .color-chips {
@@ -320,22 +323,8 @@ import { SoundService } from '../../../core/services/sound.service';
     }
 
     .quick-add-btn {
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
-      background: rgba(0, 242, 255, 0.1);
-      border: 1px solid rgba(0, 242, 255, 0.3);
-      color: #00f2ff;
-      padding: 0.4rem 0.8rem;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .quick-add-btn:hover {
-      background: #00f2ff;
-      color: #030712;
-      box-shadow: 0 0 15px rgba(0, 242, 255, 0.4);
+      padding: 0.35rem 0.75rem;
+      font-size: 0.7rem;
     }
   `]
 })
@@ -364,10 +353,20 @@ export class ProductCardComponent {
 
   onMouseMove(e: MouseEvent) {
     const rect = (this.el.nativeElement as HTMLElement).getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-    this.imgShiftX = (x / rect.width) * 14;
-    this.imgShiftY = (y / rect.height) * 14;
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    // Set 21st.dev mouse coordinate CSS custom properties for radial spotlight
+    const cardEl = (this.el.nativeElement as HTMLElement).querySelector('.spotlight-card') as HTMLElement;
+    if (cardEl) {
+      cardEl.style.setProperty('--mouse-x', `${x}px`);
+      cardEl.style.setProperty('--mouse-y', `${y}px`);
+    }
+
+    const centerX = x - rect.width / 2;
+    const centerY = y - rect.height / 2;
+    this.imgShiftX = (centerX / rect.width) * 14;
+    this.imgShiftY = (centerY / rect.height) * 14;
   }
 
   isCompared(): boolean {

@@ -55,6 +55,18 @@ export class ConfiguratorService {
     this.sound.playClick();
   }
 
+  goToStep(step: number) {
+    if (step >= 1 && step <= 4) {
+      if (step === 4) {
+        this.isCompleted.set(true);
+      } else {
+        this.isCompleted.set(false);
+      }
+      this.state.update(s => ({ ...s, currentStep: step }));
+      this.sound.playClick();
+    }
+  }
+
   completeWizard() {
     this.isCompleted.set(true);
     this.sound.playChime();

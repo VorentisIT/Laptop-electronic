@@ -19,6 +19,7 @@ export interface ExplodedLayer {
   yOffset: number;
   highlightColor?: string;
   techSpec?: string;
+  image?: string;
 }
 
 export interface ProductBenchmark {

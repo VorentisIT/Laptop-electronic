@@ -18,8 +18,7 @@ import { SoundService } from '../../core/services/sound.service';
       <div class="nav-container">
         <!-- Brand Logo -->
         <a routerLink="/" class="brand-logo" data-cursor="VIEW">
-          <span class="logo-symbol">⬢</span>
-          <span class="logo-text font-display">VORENTIS</span>
+          <img src="images/vorentis-logo.png" alt="Vorentis" class="brand-logo-img" />
           <span class="logo-sub font-mono">LABS</span>
         </a>
 
@@ -67,27 +66,6 @@ import { SoundService } from '../../core/services/sound.service';
             }
           </a>
 
-          <!-- Audio FX Toggle -->
-          <button 
-            class="action-btn audio-btn" 
-            (click)="soundService.toggleSound()" 
-            [title]="soundService.isMuted() ? 'Enable Sound FX' : 'Mute Sound FX'">
-            @if (soundService.isMuted()) {
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="1" y1="1" x2="23" y2="23"></line>
-                <path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6"></path>
-                <path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2a7 7 0 0 1-.11 1.23"></path>
-                <line x1="12" y1="19" x2="12" y2="23"></line>
-                <line x1="8" y1="23" x2="16" y2="23"></line>
-              </svg>
-            } @else {
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00f2ff" stroke-width="2">
-                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-              </svg>
-            }
-          </button>
-
           <!-- Cart Toggle -->
           <button 
             class="action-btn cart-btn" 
@@ -131,65 +109,69 @@ import { SoundService } from '../../core/services/sound.service';
   styles: [`
     .nav-header {
       position: fixed;
-      top: 0;
+      top: 1rem;
       left: 0;
       width: 100%;
       z-index: 1000;
-      padding: 1.25rem 2rem;
+      padding: 0 1.5rem;
       transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .nav-header.is-scrolled {
-      padding: 0.75rem 2rem;
-      background: rgba(8, 14, 26, 0.85);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    }
-
-    .nav-header.is-hidden {
-      transform: translateY(-100%);
+      pointer-events: none;
     }
 
     .nav-container {
-      max-width: 1440px;
+      max-width: 1320px;
       margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      padding: 0.65rem 1.25rem;
+      background: rgba(6, 11, 23, 0.78);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 242, 255, 0.08);
+      pointer-events: auto;
+      transition: all 0.3s ease;
+    }
+
+    .nav-header.is-scrolled .nav-container {
+      background: rgba(4, 8, 18, 0.92);
+      border-color: rgba(0, 242, 255, 0.25);
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 242, 255, 0.15);
+    }
+
+    .nav-header.is-hidden {
+      transform: translateY(-120%);
     }
 
     .brand-logo {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.6rem;
       text-decoration: none;
-      color: #f8fafc;
     }
 
-    .logo-symbol {
-      color: #00f2ff;
-      font-size: 1.3rem;
-      line-height: 1;
-      filter: drop-shadow(0 0 8px #00f2ff);
+    .brand-logo-img {
+      height: 28px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 0 10px rgba(0, 242, 255, 0.3));
+      transition: transform 0.2s ease;
     }
 
-    .logo-text {
-      font-size: 1.4rem;
-      font-weight: 800;
-      letter-spacing: 0.15em;
-      color: #ffffff;
+    .brand-logo:hover .brand-logo-img {
+      transform: scale(1.04);
     }
 
     .logo-sub {
-      font-size: 0.65rem;
+      font-size: 0.62rem;
       color: #00f2ff;
       letter-spacing: 0.2em;
-      margin-top: 2px;
-      padding: 0.1rem 0.3rem;
+      padding: 0.1rem 0.35rem;
       background: rgba(0, 242, 255, 0.1);
-      border: 1px solid rgba(0, 242, 255, 0.2);
-      border-radius: 2px;
+      border: 1px solid rgba(0, 242, 255, 0.25);
+      border-radius: 3px;
     }
 
     .nav-links {
@@ -335,10 +317,52 @@ import { SoundService } from '../../core/services/sound.service';
         display: none;
       }
       .mobile-toggle {
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
       .search-btn .cmd-k {
         display: none;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav-header {
+        top: 0.5rem;
+        padding: 0 0.75rem;
+      }
+
+      .nav-container {
+        padding: 0.5rem 0.85rem;
+      }
+
+      .logo-text {
+        font-size: 1.1rem;
+        letter-spacing: 0.1em;
+      }
+
+      .logo-sub {
+        display: none;
+      }
+
+      .action-btn {
+        height: 34px;
+        padding: 0 0.6rem;
+      }
+
+      .nav-actions {
+        gap: 0.4rem;
+      }
+
+      .mobile-nav-panel {
+        background: rgba(4, 8, 18, 0.96);
+        backdrop-filter: blur(25px);
+        border-radius: 16px;
+        border: 1px solid rgba(0, 242, 255, 0.2);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
+        padding: 1.5rem;
+        margin-top: 0.5rem;
+        pointer-events: auto;
       }
     }
   `]

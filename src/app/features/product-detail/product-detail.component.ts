@@ -16,17 +16,25 @@ import { ExplodedViewComponent } from '../../shared/components/exploded-view/exp
   template: `
     @if (product()) {
       <div class="product-detail-page">
-        <!-- Top Breadcrumbs -->
+        <!-- Top Breadcrumbs & Previous Navigation -->
         <div class="container-custom pt-24 pb-4">
-          <nav class="breadcrumb font-mono text-xs text-slate-400">
-            <a routerLink="/" class="hover:text-cyan-400">HOME</a>
-            <span>/</span>
-            <a routerLink="/products" class="hover:text-cyan-400">CATALOG</a>
-            <span>/</span>
-            <span class="text-cyan-400 uppercase">{{ product()?.category }}</span>
-            <span>/</span>
-            <span class="text-slate-200">{{ product()?.name }}</span>
-          </nav>
+          <div class="top-nav-bar font-mono text-xs">
+            <a routerLink="/products" class="back-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+              PREVIOUS // STORE CATALOG
+            </a>
+            <nav class="breadcrumb text-slate-400">
+              <a routerLink="/" class="hover:text-cyan-400">HOME</a>
+              <span>/</span>
+              <a routerLink="/products" class="hover:text-cyan-400">CATALOG</a>
+              <span>/</span>
+              <span class="text-cyan-400 uppercase">{{ product()?.category }}</span>
+              <span>/</span>
+              <span class="text-slate-200">{{ product()?.name }}</span>
+            </nav>
+          </div>
         </div>
 
         <!-- Main Product Hero Section (2-Column Grid) -->
@@ -302,9 +310,38 @@ import { ExplodedViewComponent } from '../../shared/components/exploded-view/exp
       padding-bottom: 6rem;
     }
 
+    .top-nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 0.85rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 4px;
+      color: #94a3b8;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .back-btn:hover {
+      border-color: #00f2ff;
+      color: #00f2ff;
+      background: rgba(0, 242, 255, 0.08);
+      transform: translateX(-2px);
+    }
+
     .breadcrumb {
       display: flex;
       gap: 0.5rem;
+      flex-wrap: wrap;
     }
 
     .product-hero-grid {

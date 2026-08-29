@@ -17,7 +17,8 @@ import { Order, CheckoutCustomer, ShippingMethod } from '../../core/models/cart.
       <!-- Minimal Trust Header -->
       <div class="checkout-minimal-header">
         <a routerLink="/" class="checkout-logo font-display">
-          <span class="text-cyan-400">⬢</span> VORENTIS <span class="font-mono text-xs text-slate-500">CHECKOUT</span>
+          <img src="images/vorentis-logo.png" alt="Vorentis" class="checkout-logo-img" />
+          <span class="checkout-badge font-mono text-xs text-cyan-400">CHECKOUT</span>
         </a>
         <div class="trust-badge font-mono text-xs text-emerald-400">
           🔒 256-BIT TLS ENCRYPTION · SOC-2 VERIFIED
@@ -280,7 +281,7 @@ import { Order, CheckoutCustomer, ShippingMethod } from '../../core/models/cart.
   `,
   styles: [`
     .checkout-page {
-      padding-top: 4rem;
+      padding-top: 7rem;
       padding-bottom: 6rem;
     }
 
@@ -288,17 +289,32 @@ import { Order, CheckoutCustomer, ShippingMethod } from '../../core/models/cart.
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 2rem;
+      padding-bottom: 1.75rem;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      margin-bottom: 3rem;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
     }
 
     .checkout-logo {
-      font-size: 1.4rem;
-      font-weight: 800;
-      color: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.85rem;
       text-decoration: none;
-      letter-spacing: 0.1em;
+    }
+
+    .checkout-logo-img {
+      height: 32px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 0 12px rgba(0, 242, 255, 0.45));
+    }
+
+    .checkout-badge {
+      border: 1px solid rgba(0, 242, 255, 0.3);
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      background: rgba(0, 242, 255, 0.08);
     }
 
     .checkout-grid {

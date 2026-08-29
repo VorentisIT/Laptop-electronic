@@ -8,7 +8,7 @@ import { SoundService } from '../../../core/services/sound.service';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <section class="exploded-section tech-box">
+    <div class="exploded-container">
       <!-- Section Header -->
       <div class="exploded-header">
         <div>
@@ -19,72 +19,90 @@ import { SoundService } from '../../../core/services/sound.service';
           </p>
         </div>
       </div>
-
       <!-- Clean 2D Layer Blueprint Stack -->
       <div class="blueprint-stack-grid">
-        <!-- Left: Layer Selector List -->
+        <!-- Left: Layer Selector List with Image Thumbnails -->
         <div class="layers-selector-list">
           @for (layer of layers; track layer.id; let idx = $index) {
             <div 
-              class="layer-item-row tech-box" 
+              class="layer-item-row tech-box spotlight-card" 
               [class.is-selected]="selectedLayer()?.id === layer.id"
               (click)="selectLayer(layer)"
               (mouseenter)="selectLayer(layer)">
+              
               <div class="layer-num font-mono">0{{ idx + 1 }}</div>
+
+              @if (layer.image) {
+                <div class="layer-thumb-bay">
+                  <img [src]="layer.image" [alt]="layer.name" class="layer-thumb-img" />
+                </div>
+              }
+
               <div class="layer-info">
                 <span class="layer-role font-mono text-xs">{{ layer.role }}</span>
                 <h4 class="layer-title font-heading">{{ layer.name }}</h4>
               </div>
+              
               <span class="layer-arrow font-mono">➔</span>
             </div>
           }
         </div>
 
-        <!-- Right: Active Layer Inspector Card -->
+        <!-- Right: Active Layer Inspector Card with High-Res Image Banner -->
         @if (selectedLayer()) {
           <div class="layer-detail-card tech-box animate-fadeIn">
-            <div class="card-top font-mono text-xs">
-              <span class="text-cyan-400">BLUEPRINT LAYER // {{ selectedLayer()?.id }}</span>
-              <span class="text-slate-400">{{ selectedLayer()?.role }}</span>
-            </div>
-
-            <h3 class="card-name font-display">{{ selectedLayer()?.name }}</h3>
-            <p class="card-description font-heading">{{ selectedLayer()?.description }}</p>
-
-            <div class="metrics-matrix font-mono text-xs">
-              <div class="matrix-row">
-                <span class="text-slate-400">MATERIAL SPECIFICATION:</span>
-                <span class="text-white font-bold">{{ selectedLayer()?.material }}</span>
+            <!-- Visual Media Showcase for Selected Layer -->
+            @if (selectedLayer()?.image) {
+              <div class="layer-hero-visual">
+                <img [src]="selectedLayer()?.image" [alt]="selectedLayer()?.name" class="layer-hero-img" />
+                <div class="layer-visual-overlay"></div>
+                <span class="layer-visual-chip font-mono text-xs">{{ selectedLayer()?.role }}</span>
               </div>
-              <div class="matrix-row">
-                <span class="text-slate-400">PERFORMANCE RATING:</span>
-                <span class="text-emerald-400 font-bold">{{ selectedLayer()?.techSpec }}</span>
-              </div>
-            </div>
+            }
 
-            <div class="blueprint-seal font-mono text-xs">
-              🔒 VERIFIED FOR SUSTAINED 275W THERMAL DISSIPATION
+            <div class="layer-detail-content">
+              <div class="card-top font-mono text-xs">
+                <span class="layer-id-chip text-cyan-400">BLUEPRINT LAYER // {{ getLayerNumber(selectedLayer()?.id) }}</span>
+                <span class="layer-spec-chip text-slate-400">{{ selectedLayer()?.techSpec }}</span>
+              </div>
+
+              <h3 class="card-name font-display">{{ selectedLayer()?.name }}</h3>
+              <p class="card-description font-heading">{{ selectedLayer()?.description }}</p>
+
+              <div class="metrics-matrix font-mono text-xs">
+                <div class="matrix-row">
+                  <span class="text-slate-400">MATERIAL SPECIFICATION:</span>
+                  <span class="text-white font-bold">{{ selectedLayer()?.material }}</span>
+                </div>
+                <div class="matrix-row">
+                  <span class="text-slate-400">PERFORMANCE RATING:</span>
+                  <span class="text-emerald-400 font-bold">{{ selectedLayer()?.techSpec }}</span>
+                </div>
+              </div>
+
+              <div class="blueprint-seal font-mono text-xs">
+                🔒 VERIFIED FOR SUSTAINED 275W THERMAL DISSIPATION
+              </div>
             </div>
           </div>
         }
       </div>
-    </section>
+    </div>
   `,
   styles: [`
-    .exploded-section {
-      padding: 3.5rem;
-      border-radius: 8px;
-      background: #060b17;
-      margin: 4rem 0;
+    .exploded-container {
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
       position: relative;
     }
 
     .exploded-header {
-      margin-bottom: 2.5rem;
+      margin-bottom: 2rem;
     }
 
     .section-heading {
-      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
       font-weight: 800;
       letter-spacing: -0.02em;
       color: #f8fafc;
@@ -99,32 +117,41 @@ import { SoundService } from '../../../core/services/sound.service';
 
     .blueprint-stack-grid {
       display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      gap: 2.5rem;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 2rem;
       align-items: flex-start;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
     }
 
     .layers-selector-list {
       display: flex;
       flex-direction: column;
       gap: 0.75rem;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
     }
 
     .layer-item-row {
       display: flex;
       align-items: center;
       gap: 1.25rem;
-      padding: 1.15rem 1.5rem;
+      padding: 0.9rem 1.25rem;
       background: #0b1324;
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 6px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+      transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
     }
 
     .layer-item-row:hover, .layer-item-row.is-selected {
       border-color: #00f2ff;
       background: rgba(0, 242, 255, 0.08);
-      transform: translateX(6px);
       box-shadow: 0 0 20px rgba(0, 242, 255, 0.15);
     }
 
@@ -132,22 +159,48 @@ import { SoundService } from '../../../core/services/sound.service';
       font-size: 0.9rem;
       font-weight: 700;
       color: #00f2ff;
+      min-width: 24px;
+    }
+
+    .layer-thumb-bay {
+      width: 48px;
+      height: 48px;
+      border-radius: 4px;
+      overflow: hidden;
+      flex-shrink: 0;
+      background: #020610;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .layer-thumb-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
     .layer-info {
       flex: 1;
+      min-width: 0;
+      overflow: hidden;
     }
 
     .layer-role {
       color: #64748b;
       letter-spacing: 0.08em;
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .layer-title {
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 700;
       color: #f8fafc;
       margin-top: 0.15rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .layer-arrow {
@@ -161,34 +214,105 @@ import { SoundService } from '../../../core/services/sound.service';
     }
 
     .layer-detail-card {
-      padding: 2.5rem;
+      padding: 0;
       background: #080e1a;
       border-radius: 8px;
       border: 1px solid rgba(0, 242, 255, 0.3);
       box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8), 0 0 25px rgba(0, 242, 255, 0.15);
       position: sticky;
       top: 6rem;
+      overflow: hidden;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+
+    .layer-hero-visual {
+      position: relative;
+      width: 100%;
+      height: 220px;
+      overflow: hidden;
+      background: #020610;
+    }
+
+    .layer-hero-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .layer-detail-card:hover .layer-hero-img {
+      transform: scale(1.05);
+    }
+
+    .layer-visual-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 30%, #080e1a 100%);
+    }
+
+    .layer-visual-chip {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: rgba(8, 14, 26, 0.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(0, 242, 255, 0.3);
+      color: #00f2ff;
+      padding: 0.3rem 0.65rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+    }
+
+    .layer-detail-content {
+      padding: 1.75rem 2rem 2rem;
+      width: 100%;
+      box-sizing: border-box;
     }
 
     .card-top {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 1rem;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.85rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 0.6rem;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .layer-id-chip {
+      color: #00f2ff;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+
+    .layer-spec-chip {
+      color: #94a3b8;
+      font-size: 0.72rem;
+      word-break: break-word;
     }
 
     .card-name {
-      font-size: 1.8rem;
+      font-size: clamp(1.15rem, 3.5vw, 1.6rem);
       font-weight: 800;
       color: #ffffff;
-      margin-bottom: 0.75rem;
-      line-height: 1.15;
+      margin-bottom: 0.5rem;
+      line-height: 1.2;
+      word-break: break-word;
+      overflow-wrap: break-word;
     }
 
     .card-description {
-      font-size: 0.95rem;
+      font-size: 0.88rem;
       color: #cbd5e1;
-      line-height: 1.6;
-      margin-bottom: 2rem;
+      line-height: 1.55;
+      margin-bottom: 1.25rem;
+      word-break: break-word;
+      overflow-wrap: break-word;
     }
 
     .metrics-matrix {
@@ -197,13 +321,22 @@ import { SoundService } from '../../../core/services/sound.service';
       gap: 0.75rem;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
       padding-top: 1.25rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
+      width: 100%;
+      box-sizing: border-box;
     }
 
     .matrix-row {
       display: flex;
       justify-content: space-between;
       gap: 1rem;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .matrix-row span {
+      word-break: break-word;
+      overflow-wrap: break-word;
     }
 
     .blueprint-seal {
@@ -213,6 +346,10 @@ import { SoundService } from '../../../core/services/sound.service';
       padding: 0.5rem 0.85rem;
       border-radius: 4px;
       text-align: center;
+      font-size: 0.7rem;
+      white-space: normal;
+      line-height: 1.35;
+      word-break: break-word;
     }
 
     @keyframes fadeIn {
@@ -224,9 +361,86 @@ import { SoundService } from '../../../core/services/sound.service';
     @media (max-width: 900px) {
       .blueprint-stack-grid {
         grid-template-columns: 1fr;
+        gap: 1.5rem;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
       }
       .layer-detail-card {
         position: static;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .exploded-container {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+      .blueprint-stack-grid {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        gap: 1rem;
+      }
+      .layers-selector-list {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        gap: 0.5rem;
+      }
+      .layer-item-row {
+        padding: 0.65rem 0.85rem;
+        gap: 0.65rem;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+      .layer-role {
+        display: none;
+      }
+      .layer-title {
+        font-size: 0.85rem;
+        margin-top: 0;
+        white-space: normal;
+        line-height: 1.25;
+      }
+      .layer-item-row.is-selected {
+        border-left: 3px solid #00f2ff;
+      }
+      .layer-thumb-bay {
+        width: 36px;
+        height: 36px;
+      }
+      .layer-hero-visual {
+        height: 140px;
+        width: 100%;
+      }
+      .layer-detail-card {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+      .layer-detail-content {
+        padding: 1rem;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .card-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+      }
+      .card-name {
+        font-size: 1.2rem;
+        line-height: 1.2;
+      }
+      .matrix-row {
+        flex-direction: column;
+        gap: 0.2rem;
       }
     }
   `]
@@ -244,7 +458,8 @@ export class ExplodedViewComponent {
       depthZ: 140,
       yOffset: 90,
       highlightColor: '#00f2ff',
-      techSpec: '3840 x 2400 · 240Hz · 2500 nits'
+      techSpec: '3840 x 2400 · 240Hz · 2500 nits',
+      image: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=800&q=80'
     },
     {
       id: 'layer-keyboard',
@@ -255,7 +470,8 @@ export class ExplodedViewComponent {
       depthZ: 95,
       yOffset: 40,
       highlightColor: '#3b82f6',
-      techSpec: 'Optical 45g actuation · 0.1ms debounce'
+      techSpec: 'Optical 45g actuation · 0.1ms debounce',
+      image: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=800&q=80'
     },
     {
       id: 'layer-chassis-top',
@@ -266,7 +482,8 @@ export class ExplodedViewComponent {
       depthZ: 60,
       yOffset: 20,
       highlightColor: '#94a3b8',
-      techSpec: '1.2mm wall thickness · 380% rigidity'
+      techSpec: '1.2mm wall thickness · 380% rigidity',
+      image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=800&q=80'
     },
     {
       id: 'layer-motherboard',
@@ -277,7 +494,8 @@ export class ExplodedViewComponent {
       depthZ: 10,
       yOffset: -10,
       highlightColor: '#10b981',
-      techSpec: '24 Cores / 32 Threads · 5.8 GHz Turbo'
+      techSpec: '24 Cores / 32 Threads · 5.8 GHz Turbo',
+      image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80'
     },
     {
       id: 'layer-cooling',
@@ -288,7 +506,8 @@ export class ExplodedViewComponent {
       depthZ: -35,
       yOffset: -30,
       highlightColor: '#00f2ff',
-      techSpec: '250W sustained TDP · Liquid Metal TIM'
+      techSpec: '250W sustained TDP · Liquid Metal TIM',
+      image: 'https://images.unsplash.com/photo-1591488320449-011701bb6704?auto=format&fit=crop&w=800&q=80'
     },
     {
       id: 'layer-battery',
@@ -299,7 +518,20 @@ export class ExplodedViewComponent {
       depthZ: -75,
       yOffset: -50,
       highlightColor: '#f59e0b',
-      techSpec: '99.9Wh FAA Maximum · 0-80% in 34 mins'
+      techSpec: '99.9Wh FAA Maximum · 0-80% in 34 mins',
+      image: 'https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=800&q=80'
+    },
+    {
+      id: 'layer-chassis-bottom',
+      name: 'Graphene-Coated Base Shell',
+      description: 'Bottom intake cowl with integrated anti-dust magnetic filtration and composite thermal shielding.',
+      material: 'Graphene Composite + Rubber Isolators',
+      role: 'Acoustic Insulation & Intake Aerodynamics',
+      depthZ: -110,
+      yOffset: -70,
+      highlightColor: '#64748b',
+      techSpec: 'Direct Air Induction · <28 dBA Whisper Mode',
+      image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80'
     }
   ];
 
@@ -308,5 +540,11 @@ export class ExplodedViewComponent {
   selectLayer(layer: ExplodedLayer) {
     this.selectedLayer.set(layer);
     this.sound.playClick();
+  }
+
+  getLayerNumber(id?: string): string {
+    if (!id) return '01';
+    const index = this.layers.findIndex(l => l.id === id);
+    return index >= 0 ? `0${index + 1}` : '01';
   }
 }

@@ -48,7 +48,8 @@ export const MOCK_PRODUCTS: Product[] = [
         depthZ: 140,
         yOffset: 90,
         highlightColor: '#00f2ff',
-        techSpec: '3840 x 2400 · 240Hz · 2500 nits · 0.2ms'
+        techSpec: '3840 x 2400 · 240Hz · 2500 nits · 0.2ms',
+        image: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=800&q=80'
       },
       {
         id: 'layer-keyboard',
@@ -59,7 +60,8 @@ export const MOCK_PRODUCTS: Product[] = [
         depthZ: 95,
         yOffset: 40,
         highlightColor: '#3b82f6',
-        techSpec: 'Optical 45g actuation · 0.1ms debounce'
+        techSpec: 'Optical 45g actuation · 0.1ms debounce',
+        image: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=800&q=80'
       },
       {
         id: 'layer-chassis-top',
@@ -70,7 +72,8 @@ export const MOCK_PRODUCTS: Product[] = [
         depthZ: 60,
         yOffset: 20,
         highlightColor: '#94a3b8',
-        techSpec: '1.2mm wall thickness · 380% rigidity vs aluminum'
+        techSpec: '1.2mm wall thickness · 380% rigidity vs aluminum',
+        image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=800&q=80'
       },
       {
         id: 'layer-motherboard',
@@ -81,7 +84,8 @@ export const MOCK_PRODUCTS: Product[] = [
         depthZ: 10,
         yOffset: -10,
         highlightColor: '#10b981',
-        techSpec: '24 Cores / 32 Threads · 5.8 GHz Turbo'
+        techSpec: '24 Cores / 32 Threads · 5.8 GHz Turbo',
+        image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80'
       },
       {
         id: 'layer-cooling',
@@ -92,7 +96,8 @@ export const MOCK_PRODUCTS: Product[] = [
         depthZ: -35,
         yOffset: -30,
         highlightColor: '#00f2ff',
-        techSpec: '250W sustained TDP · Liquid Metal TIM'
+        techSpec: '250W sustained TDP · Liquid Metal TIM',
+        image: 'https://images.unsplash.com/photo-1591488320449-011701bb6704?auto=format&fit=crop&w=800&q=80'
       },
       {
         id: 'layer-battery',
@@ -103,7 +108,8 @@ export const MOCK_PRODUCTS: Product[] = [
         depthZ: -75,
         yOffset: -50,
         highlightColor: '#f59e0b',
-        techSpec: '99.9Wh FAA Maximum · 0-80% in 34 mins'
+        techSpec: '99.9Wh FAA Maximum · 0-80% in 34 mins',
+        image: 'https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=800&q=80'
       },
       {
         id: 'layer-chassis-bottom',
@@ -114,7 +120,8 @@ export const MOCK_PRODUCTS: Product[] = [
         depthZ: -110,
         yOffset: -70,
         highlightColor: '#64748b',
-        techSpec: 'Direct Air Induction · <28 dBA Whisper Mode'
+        techSpec: 'Direct Air Induction · <28 dBA Whisper Mode',
+        image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80'
       }
     ],
     colors: [
@@ -180,11 +187,11 @@ export const MOCK_PRODUCTS: Product[] = [
     isFeatured: true,
     stockStatus: 'in_stock',
     badge: 'CREATIVE CHOICE',
-    heroImage: 'images/frames/ezgif-frame-010.jpg',
+    heroImage: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=1200&q=85',
     galleryImages: [
-      'images/frames/ezgif-frame-010.jpg',
-      'images/frames/ezgif-frame-018.jpg',
-      'images/frames/ezgif-frame-028.jpg'
+      'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=1200&q=85',
+      'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?auto=format&fit=crop&w=1200&q=85',
+      'https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?auto=format&fit=crop&w=1200&q=85'
     ],
     explodedViewAvailable: true,
     colors: [
@@ -248,10 +255,10 @@ export const MOCK_PRODUCTS: Product[] = [
     isFeatured: true,
     stockStatus: 'in_stock',
     badge: 'AI NEURAL RIG',
-    heroImage: 'images/frames/ezgif-frame-035.jpg',
+    heroImage: 'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&w=1200&q=85',
     galleryImages: [
-      'images/frames/ezgif-frame-035.jpg',
-      'images/frames/ezgif-frame-022.jpg'
+      'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&w=1200&q=85',
+      'https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?auto=format&fit=crop&w=1200&q=85'
     ],
     explodedViewAvailable: true,
     colors: [
@@ -315,10 +322,10 @@ export const MOCK_PRODUCTS: Product[] = [
     isFeatured: false,
     stockStatus: 'in_stock',
     badge: '4K 240HZ QD-OLED',
-    heroImage: 'images/frames/ezgif-frame-020.jpg',
+    heroImage: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=1200&q=85',
     galleryImages: [
-      'images/frames/ezgif-frame-020.jpg',
-      'images/frames/ezgif-frame-005.jpg'
+      'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=1200&q=85',
+      'https://images.unsplash.com/photo-1547082299-de196ea013d6?auto=format&fit=crop&w=1200&q=85'
     ],
     explodedViewAvailable: false,
     colors: [
@@ -381,10 +388,10 @@ export const MOCK_PRODUCTS: Product[] = [
     isFeatured: true,
     stockStatus: 'low_stock',
     badge: 'UNLOCKED 600W',
-    heroImage: 'images/frames/ezgif-frame-025.jpg',
+    heroImage: 'https://images.unsplash.com/photo-1591488320449-011701bb6704?auto=format&fit=crop&w=1200&q=85',
     galleryImages: [
-      'images/frames/ezgif-frame-025.jpg',
-      'images/frames/ezgif-frame-015.jpg'
+      'https://images.unsplash.com/photo-1591488320449-011701bb6704?auto=format&fit=crop&w=1200&q=85',
+      'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1200&q=85'
     ],
     explodedViewAvailable: true,
     colors: [
@@ -447,9 +454,10 @@ export const MOCK_PRODUCTS: Product[] = [
     isFeatured: false,
     stockStatus: 'in_stock',
     badge: '8000HZ RAPID TRIGGER',
-    heroImage: 'images/frames/ezgif-frame-012.jpg',
+    heroImage: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=1200&q=85',
     galleryImages: [
-      'images/frames/ezgif-frame-012.jpg'
+      'https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=1200&q=85',
+      'https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?auto=format&fit=crop&w=1200&q=85'
     ],
     explodedViewAvailable: false,
     colors: [
