@@ -1,0 +1,12 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "laptop-electronic",
+  "compatibility_date": "2026-08-28",
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": "dist/vorentis-temp/browser",
+    "not_found_handling": "single-page-application"
+  }
+}
