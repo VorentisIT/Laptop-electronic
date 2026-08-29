@@ -7,7 +7,8 @@ import {
   OnDestroy, 
   HostListener, 
   inject, 
-  signal 
+  signal,
+  NgZone
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { gsap } from 'gsap';
@@ -297,6 +298,7 @@ export class HeroStageComponent implements OnInit, AfterViewInit, OnDestroy {
   private scrollTriggerInstance: ScrollTrigger | null = null;
   private isRendering = false;
   private requestedFrame = 0;
+  private ngZone = inject(NgZone);
 
   ngOnInit() {
     this.preloadBitmaps();
@@ -321,31 +323,35 @@ export class HeroStageComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  private async preloadBitmaps() {
-    for (let i = 0; i < this.frames.length; i++) {
-      const src = this.frames[i];
-      try {
-        if ('createImageBitmap' in window) {
-          const response = await fetch(src);
-          const blob = await response.blob();
-          const bitmap = await createImageBitmap(blob);
-          this.bitmaps[i] = bitmap;
-        } else {
+  private preloadBitmaps() {
+    this.ngZone.runOutsideAngular(async () => {
+      const loadPromises = this.frames.map(async (src, i) => {
+        try {
+          if ('createImageBitmap' in window) {
+            const response = await fetch(src);
+            const blob = await response.blob();
+            const bitmap = await createImageBitmap(blob);
+            this.bitmaps[i] = bitmap;
+          } else {
+            const img = new Image();
+            img.src = src;
+            await new Promise(r => { img.onload = r; img.onerror = r; });
+            this.bitmaps[i] = img;
+          }
+        } catch {
           const img = new Image();
           img.src = src;
           this.bitmaps[i] = img;
         }
-      } catch {
-        const img = new Image();
-        img.src = src;
-        this.bitmaps[i] = img;
-      }
 
-      if (i === 0) {
-        this.scheduleRender(0);
-      }
-    }
-    ScrollTrigger.refresh();
+        if (i === 0) {
+          this.scheduleRender(0);
+        }
+      });
+
+      await Promise.all(loadPromises);
+      ScrollTrigger.refresh();
+    });
   }
 
   private setupCanvas() {
@@ -395,7 +401,7 @@ export class HeroStageComponent implements OnInit, AfterViewInit, OnDestroy {
         const centerShiftX = (canvas.width - width * ratio) / 2;
         const centerShiftY = (canvas.height - height * ratio) / 2;
 
-        // Fast zero-copy draw
+        // Fast zero-copy GPU draw
         this.ctx.drawImage(
           asset,
           0, 0, width, height,
@@ -408,35 +414,42 @@ export class HeroStageComponent implements OnInit, AfterViewInit, OnDestroy {
   private initScrollScrubber() {
     const container = this.stageContainer.nativeElement;
 
-    this.scrollTriggerInstance = ScrollTrigger.create({
-      trigger: container,
-      start: 'top top',
-      end: '+=150%',
-      pin: true,
-      pinSpacing: true,
-      scrub: 0.15, // Blisteringly snappy 0.15s scrub
-      onUpdate: (self) => {
-        const progress = self.progress;
-        this.scrollProgress.set(progress);
+    this.ngZone.runOutsideAngular(() => {
+      this.scrollTriggerInstance = ScrollTrigger.create({
+        trigger: container,
+        start: 'top top',
+        end: '+=150%',
+        pin: true,
+        pinSpacing: true,
+        scrub: 0.1, // Ultra-responsive 0.1s scrub
+        onUpdate: (self) => {
+          const progress = self.progress;
 
-        const frameIndex = Math.min(
-          this.frames.length - 1,
-          Math.floor(progress * this.frames.length)
-        );
+          const frameIndex = Math.min(
+            this.frames.length - 1,
+            Math.floor(progress * this.frames.length)
+          );
 
-        if (frameIndex !== this.currentFrameIndex()) {
-          this.currentFrameIndex.set(frameIndex);
-          this.scheduleRender(frameIndex);
+          if (frameIndex !== this.requestedFrame) {
+            this.scheduleRender(frameIndex);
+          }
+
+          let phase = 1;
+          if (progress >= 0.72) {
+            phase = 3;
+          } else if (progress >= 0.35) {
+            phase = 2;
+          }
+
+          if (this.currentPhase() !== phase || this.currentFrameIndex() !== frameIndex) {
+            this.ngZone.run(() => {
+              this.scrollProgress.set(progress);
+              this.currentFrameIndex.set(frameIndex);
+              this.currentPhase.set(phase);
+            });
+          }
         }
-
-        if (progress < 0.35) {
-          this.currentPhase.set(1);
-        } else if (progress < 0.72) {
-          this.currentPhase.set(2);
-        } else {
-          this.currentPhase.set(3);
-        }
-      }
+      });
     });
   }
 

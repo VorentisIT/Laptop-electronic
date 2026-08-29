@@ -1,8 +1,7 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { CustomCursorComponent } from './ui/custom-cursor/custom-cursor.component';
@@ -73,58 +72,23 @@ gsap.registerPlugin(ScrollTrigger);
     }
   `]
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit {
   cartService = inject(CartService);
   private router = inject(Router);
-  private lenis: Lenis | null = null;
-  private tickerCallback: ((time: number) => void) | null = null;
 
   ngOnInit() {
-    this.initSmoothScroll();
     this.listenToRouteChanges();
-  }
-
-  ngOnDestroy() {
-    if (this.tickerCallback) {
-      gsap.ticker.remove(this.tickerCallback);
-    }
-    this.lenis?.destroy();
-  }
-
-  private initSmoothScroll() {
-    if (typeof window !== 'undefined') {
-      try {
-        this.lenis = new Lenis({
-          duration: 0.75,
-          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-          orientation: 'vertical',
-          smoothWheel: true,
-          wheelMultiplier: 1.15,
-          touchMultiplier: 1.4
-        });
-
-        this.lenis.on('scroll', () => {
-          ScrollTrigger.update();
-        });
-
-        this.tickerCallback = (time: number) => {
-          this.lenis?.raf(time * 1000);
-        };
-        gsap.ticker.add(this.tickerCallback);
-        gsap.ticker.lagSmoothing(0);
-      } catch {}
-    }
   }
 
   private listenToRouteChanges() {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe(() => {
-      this.lenis?.scrollTo(0, { immediate: true });
-      window.scrollTo(0, 0);
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
       setTimeout(() => {
         ScrollTrigger.refresh();
-      }, 100);
+      }, 50);
     });
   }
 }
+

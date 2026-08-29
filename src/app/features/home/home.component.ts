@@ -5,7 +5,8 @@ import {
   AfterViewInit,
   OnDestroy,
   ElementRef,
-  ViewChild
+  ViewChild,
+  NgZone
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
@@ -2043,6 +2044,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
 
 
   private productService = inject(ProductService);
+  private ngZone = inject(NgZone);
 
   readonly products = this.productService.products;
 
@@ -2129,29 +2131,31 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
      * Animate the product rail after Angular updates
      * the @for block.
      */
-    requestAnimationFrame(() => {
+    this.ngZone.runOutsideAngular(() => {
+      requestAnimationFrame(() => {
 
-      if (!this.productsRail) return;
+        if (!this.productsRail) return;
 
-      const items =
-        this.productsRail.nativeElement
-          .querySelectorAll('.product-rail-item');
+        const items =
+          this.productsRail.nativeElement
+            .querySelectorAll('.product-rail-item');
 
-      gsap.fromTo(
-        items,
-        {
-          opacity: 0,
-          y: 35
-        },
-        {
-          opacity: 1,
-          y: 0,
-          duration: .55,
-          stagger: .07,
-          ease: 'power3.out'
-        }
-      );
+        gsap.fromTo(
+          items,
+          {
+            opacity: 0,
+            y: 35
+          },
+          {
+            opacity: 1,
+            y: 0,
+            duration: .55,
+            stagger: .07,
+            ease: 'power3.out'
+          }
+        );
 
+      });
     });
 
   }
@@ -2178,25 +2182,24 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     /*
      * IMPORTANT:
      *
-     * HeroStageComponent is intentionally NOT included
-     * in any GSAP selector or ScrollTrigger.
-     *
-     * This prevents the redesigned homepage animations
-     * from interfering with the existing hero.
+     * Run all GSAP ScrollTriggers outside Angular's zone
+     * to eliminate change detection loops during scroll.
      */
 
-    requestAnimationFrame(() => {
+    this.ngZone.runOutsideAngular(() => {
+      requestAnimationFrame(() => {
 
-      this.initManifestoAnimations();
+        this.initManifestoAnimations();
 
-      this.initSectionAnimations();
+        this.initSectionAnimations();
 
-      this.initProductAnimations();
+        this.initProductAnimations();
 
-      this.initMagneticButtons();
+        this.initMagneticButtons();
 
-      ScrollTrigger.refresh();
+        ScrollTrigger.refresh();
 
+      });
     });
 
   }
