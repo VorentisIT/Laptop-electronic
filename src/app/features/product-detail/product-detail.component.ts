@@ -680,9 +680,63 @@ import { ExplodedViewComponent } from '../../shared/components/exploded-view/exp
     @media (max-width: 1024px) {
       .product-hero-grid {
         grid-template-columns: 1fr;
+        gap: 2rem;
       }
       .spec-table-grid {
         grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .product-detail-page {
+        padding-bottom: 5rem;
+      }
+
+      .gallery-stage {
+        height: auto;
+        min-height: 320px;
+        padding: 1rem;
+      }
+
+      .benchmarks-card {
+        padding: 1.5rem;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .top-nav-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+
+      .view-mode-tabs {
+        flex-wrap: wrap;
+      }
+
+      .price-large {
+        font-size: 1.8rem;
+      }
+
+      .order-actions-row {
+        flex-direction: column;
+      }
+
+      .compare-action-btn {
+        width: 100%;
+      }
+
+      .bar-content {
+        flex-direction: row;
+        justify-content: space-between;
+      }
+
+      .bar-left span.font-heading {
+        font-size: 0.85rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 130px;
       }
     }
   `]

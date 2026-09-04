@@ -252,16 +252,30 @@ import { RouterLink } from '@angular/router';
     @media (max-width: 1024px) {
       .footer-grid {
         grid-template-columns: 1fr 1fr;
+        gap: 2.5rem;
       }
     }
 
     @media (max-width: 640px) {
       .footer-grid {
         grid-template-columns: 1fr;
+        padding-top: 3rem;
+        padding-bottom: 2.5rem;
+        gap: 2rem;
+      }
+      .brand-manifesto {
+        max-width: 100%;
+      }
+      .dispatch-form {
+        flex-direction: column;
       }
       .bottom-content {
         flex-direction: column;
         align-items: flex-start;
+        gap: 0.75rem;
+      }
+      .legal-links {
+        flex-wrap: wrap;
       }
     }
   `]

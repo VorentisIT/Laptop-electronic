@@ -297,19 +297,45 @@ import { SoundService } from '../../core/services/sound.service';
     .mobile-nav-panel {
       display: flex;
       flex-direction: column;
-      gap: 1rem;
-      padding: 1.5rem;
-      background: #080e1a;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      margin-top: 0.75rem;
+      gap: 0.75rem;
+      padding: 1.25rem;
+      background: rgba(4, 8, 18, 0.96);
+      backdrop-filter: blur(25px) saturate(180%);
+      -webkit-backdrop-filter: blur(25px) saturate(180%);
+      border-radius: 16px;
+      border: 1px solid rgba(0, 242, 255, 0.25);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 25px rgba(0, 242, 255, 0.1);
+      margin-top: 0.5rem;
+      pointer-events: auto;
+      animation: mobileMenuFade 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes mobileMenuFade {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .mobile-nav-panel a {
       color: #cbd5e1;
       text-decoration: none;
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 600;
+      letter-spacing: 0.05em;
+      padding: 0.6rem 0.85rem;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .mobile-nav-panel a:hover, .mobile-nav-panel a.is-active {
+      color: #00f2ff;
+      border-color: rgba(0, 242, 255, 0.3);
+      background: rgba(0, 242, 255, 0.08);
     }
 
     @media (max-width: 1024px) {
@@ -351,18 +377,7 @@ import { SoundService } from '../../core/services/sound.service';
       }
 
       .nav-actions {
-        gap: 0.4rem;
-      }
-
-      .mobile-nav-panel {
-        background: rgba(4, 8, 18, 0.96);
-        backdrop-filter: blur(25px);
-        border-radius: 16px;
-        border: 1px solid rgba(0, 242, 255, 0.2);
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
-        padding: 1.5rem;
-        margin-top: 0.5rem;
-        pointer-events: auto;
+        gap: 0.35rem;
       }
     }
   `]

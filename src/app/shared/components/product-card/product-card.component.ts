@@ -326,6 +326,26 @@ import { SoundService } from '../../../core/services/sound.service';
       padding: 0.35rem 0.75rem;
       font-size: 0.7rem;
     }
+
+    @media (max-width: 640px) {
+      .image-stage {
+        height: 200px;
+        padding: 1rem;
+      }
+      .card-info {
+        padding: 1rem;
+      }
+      .product-title {
+        font-size: 1rem;
+      }
+      .product-tagline {
+        font-size: 0.78rem;
+        margin-bottom: 0.85rem;
+      }
+      .current-price {
+        font-size: 1.1rem;
+      }
+    }
   `]
 })
 export class ProductCardComponent {

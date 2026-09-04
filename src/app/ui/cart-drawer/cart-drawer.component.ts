@@ -544,6 +544,19 @@ import { CartService } from '../../core/services/cart.service';
       color: #64748b;
       letter-spacing: 0.05em;
     }
+
+    @media (max-width: 480px) {
+      .cart-drawer {
+        width: 100vw;
+        max-width: 100vw;
+      }
+      .cart-header, .cart-footer, .cart-items-container {
+        padding: 1rem;
+      }
+      .shipping-meter {
+        padding: 0.75rem 1rem;
+      }
+    }
   `]
 })
 export class CartDrawerComponent {

@@ -366,12 +366,61 @@ interface TechComponentSpec {
       line-height: 1.6;
     }
 
+    .components-nav-ribbon {
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      padding: 0.5rem;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .components-nav-ribbon::-webkit-scrollbar {
+      display: none;
+    }
+
     @media (max-width: 1024px) {
       .deep-dive-grid {
         grid-template-columns: 1fr;
+        gap: 2rem;
       }
       .component-deep-dive {
         padding: 1.5rem;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .tech-lab-page {
+        padding-top: 5rem;
+      }
+
+      .diagram-plate {
+        padding: 1.25rem;
+      }
+
+      .hologram-visual {
+        width: 160px;
+        height: 160px;
+        margin: 1rem 0;
+      }
+
+      .holo-ring.outer {
+        width: 150px;
+        height: 150px;
+      }
+
+      .holo-ring.inner {
+        width: 110px;
+        height: 110px;
+      }
+
+      .metric-chips-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .pillar-block {
+        padding: 1rem;
       }
     }
   `]

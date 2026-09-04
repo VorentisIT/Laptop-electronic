@@ -200,6 +200,43 @@ interface CategoryWorldInfo {
       grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
       gap: 2rem;
     }
+
+    @media (max-width: 768px) {
+      .category-world-page {
+        padding-top: 5rem;
+      }
+
+      .cat-products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.25rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .cat-world-title {
+        font-size: clamp(2.2rem, 8vw, 3.2rem);
+      }
+
+      .cat-world-tagline {
+        font-size: 1.05rem;
+      }
+
+      .category-switchers {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        width: 100%;
+        padding-bottom: 0.25rem;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .cat-link {
+        white-space: nowrap;
+      }
+
+      .cat-products-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   `]
 })
 export class CategoriesComponent implements OnInit {

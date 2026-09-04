@@ -622,6 +622,35 @@ import { ConfigPriority } from '../../core/models/configurator.model';
         margin: 0 auto;
       }
     }
+
+    @media (max-width: 768px) {
+      .configurator-page {
+        padding-top: 5rem;
+      }
+      .options-grid {
+        grid-template-columns: 1fr;
+      }
+      .card-media-bay {
+        height: 140px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .step-tracker {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        padding-bottom: 0.5rem;
+        -webkit-overflow-scrolling: touch;
+      }
+      .step-pill-btn {
+        white-space: nowrap;
+        font-size: 0.68rem;
+      }
+      .step-line {
+        display: none;
+      }
+    }
   `]
 })
 export class ConfiguratorComponent {

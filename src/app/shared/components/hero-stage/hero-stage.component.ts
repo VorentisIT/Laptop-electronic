@@ -263,17 +263,62 @@ gsap.registerPlugin(ScrollTrigger);
 
     @media (max-width: 768px) {
       .cinema-text-layer {
-        top: 5rem;
-        left: 1.5rem;
-        right: 1.5rem;
-      }
-      .cinema-bottom-bar {
-        left: 1.5rem;
-        right: 1.5rem;
-        bottom: 1.25rem;
+        top: 4.8rem;
+        left: 1.25rem;
+        right: 1.25rem;
+        max-width: none;
       }
       .cinema-title {
-        font-size: 2.2rem;
+        font-size: clamp(1.9rem, 7.5vw, 2.6rem);
+      }
+      .cinema-subtitle {
+        font-size: 0.85rem;
+        max-width: 100%;
+      }
+      .cinema-bottom-bar {
+        left: 1.25rem;
+        right: 1.25rem;
+        bottom: 1.25rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .cinema-text-layer {
+        top: 4.25rem;
+        left: 1rem;
+        right: 1rem;
+      }
+      .eyebrow-tag {
+        font-size: 0.6rem;
+        letter-spacing: 0.12em;
+        margin-bottom: 0.35rem;
+      }
+      .cinema-title {
+        font-size: clamp(1.6rem, 7.5vw, 2.1rem);
+        margin-bottom: 0.35rem;
+      }
+      .cinema-subtitle {
+        font-size: 0.78rem;
+        line-height: 1.35;
+      }
+      .cinema-bottom-bar {
+        left: 1rem;
+        right: 1rem;
+        bottom: 0.85rem;
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: stretch;
+      }
+      .scroll-status {
+        justify-content: center;
+        font-size: 0.62rem;
+        padding: 0.3rem 0.65rem;
+      }
+      .order-link-btn {
+        width: 100%;
+        text-align: center;
+        font-size: 0.75rem;
+        padding: 0.55rem 1rem;
       }
     }
   `]

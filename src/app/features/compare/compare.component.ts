@@ -248,6 +248,36 @@ import { CartService } from '../../core/services/cart.service';
       gap: 2rem;
     }
 
+    @media (max-width: 768px) {
+      .compare-page {
+        padding-top: 5rem;
+      }
+
+      .matrix-grid {
+        gap: 1.25rem;
+      }
+
+      .matrix-card {
+        padding: 1.25rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .matrix-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .empty-matrix {
+        padding: 2.5rem 1rem;
+      }
+
+      .quick-add-strip {
+        padding: 0.85rem;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
     .matrix-card {
       padding: 2rem;
       background: #080e1a;

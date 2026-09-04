@@ -361,9 +361,45 @@ gsap.registerPlugin(ScrollTrigger);
     }
 
     @media (max-width: 768px) {
+      .products-page {
+        padding-top: 5rem;
+      }
+
       .toolbar-wrapper {
         flex-direction: column;
         align-items: stretch;
+        padding: 1rem;
+      }
+
+      .toolbar-actions {
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+
+      .catalog-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.25rem;
+      }
+
+      .matrix-header, .matrix-row {
+        min-width: 850px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .category-tabs {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 0.25rem;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .tab-btn {
+        white-space: nowrap;
+      }
+
+      .catalog-grid {
+        grid-template-columns: 1fr;
       }
     }
   `]

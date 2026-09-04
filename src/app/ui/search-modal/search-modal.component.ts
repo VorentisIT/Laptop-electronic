@@ -412,6 +412,45 @@ import { Product } from '../../core/models/product.model';
       font-size: 0.65rem;
       color: #475569;
     }
+
+    @media (max-width: 640px) {
+      .search-backdrop {
+        padding-top: 1rem;
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+      }
+
+      .search-palette {
+        max-height: 92vh;
+      }
+
+      .search-input-wrapper {
+        padding: 1rem;
+      }
+
+      .search-input {
+        font-size: 1rem;
+      }
+
+      .search-body {
+        padding: 1rem;
+        max-height: calc(92vh - 120px);
+      }
+
+      .cat-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .search-footer {
+        padding: 0.65rem 1rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .shortcut-tip {
+        display: none;
+      }
+    }
   `]
 })
 export class SearchModalComponent implements AfterViewInit {

@@ -359,10 +359,18 @@ interface FrameHotspot {
 
     @media (max-width: 768px) {
       .frame-viewer-container {
-        height: 500px;
+        height: 440px;
         border-radius: 8px;
       }
+    }
 
+    @media (max-width: 480px) {
+      .frame-viewer-container {
+        height: 360px;
+      }
+    }
+
+    @media (max-width: 768px) {
       .viewer-top-hud {
         top: 0.75rem;
         left: 0.75rem;

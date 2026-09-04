@@ -1566,8 +1566,44 @@ gsap.registerPlugin(ScrollTrigger);
       .workflow-container {
         grid-template-columns: 1fr;
       }
+      .workflow-console {
+        padding-left: 0;
+        padding-right: 0;
+        padding-top: 1.25rem;
+        padding-bottom: 1.25rem;
+        overflow: hidden;
+      }
+      .console-top {
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
+        margin-bottom: 0;
+        padding-bottom: 1rem;
+      }
       .workflow-options {
         grid-template-columns: 1fr;
+        gap: 0;
+        width: 100%;
+      }
+      .workflow-option {
+        border-left: none;
+        border-right: none;
+        border-radius: 0;
+        border-top: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 1rem 1.25rem;
+        margin: 0;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .workflow-option:last-child {
+        border-bottom: none;
+      }
+      .workflow-result {
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
+        margin-top: 0;
+        padding-top: 1.25rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
       }
     }
 
@@ -1964,17 +2000,17 @@ gsap.registerPlugin(ScrollTrigger);
       }
 
       .workflow-option {
-        grid-template-columns: 38px 1fr auto;
+        grid-template-columns: 44px 1fr auto;
       }
 
       .workflow-description {
-        max-width: 180px;
+        max-width: 100%;
       }
 
       .workflow-result {
         align-items: flex-start;
         flex-direction: column;
-        margin-top: 1rem;
+        gap: 1rem;
       }
 
       .final-section {
@@ -1987,6 +2023,24 @@ gsap.registerPlugin(ScrollTrigger);
         margin: 0.75rem 0 1.5rem;
       }
 
+    }
+
+    @media (max-width: 480px) {
+      .product-rail-item {
+        flex: 0 0 min(300px, 85vw);
+      }
+      .workflow-description {
+        max-width: 100%;
+      }
+      .final-actions {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+      }
+      .final-actions .magnetic-button, .final-actions .text-button {
+        width: 100%;
+        justify-content: center;
+      }
     }
 
 

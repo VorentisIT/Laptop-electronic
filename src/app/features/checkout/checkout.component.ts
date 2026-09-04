@@ -522,6 +522,40 @@ import { Order, CheckoutCustomer, ShippingMethod } from '../../core/models/cart.
       .input-group.span-2 {
         grid-column: span 1;
       }
+      .summary-card {
+        position: static;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .checkout-page {
+        padding-top: 5.5rem;
+      }
+
+      .form-card, .summary-card {
+        padding: 1.25rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .checkout-minimal-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+
+      .payment-tabs {
+        flex-direction: column;
+      }
+
+      .pay-tab {
+        width: 100%;
+        text-align: center;
+      }
+
+      .shipping-option-card {
+        padding: 0.75rem 1rem;
+      }
     }
   `]
 })
